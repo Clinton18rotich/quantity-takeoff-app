@@ -63,5 +63,3 @@ table{width:100%;border-collapse:collapse;font-family:'Caveat',cursive;font-size
 .btn-clear{background:var(--danger)}
 @media print{body{background:white}.sidebar{display:none}.app-container{display:block}.takeoff-sheet{padding:15px;background:white}.btn-calculate,.btn-export,.btn-csv,.btn-save,.btn-load,.btn-clear,.check-btn,.btn-add-sheet,.btn-quick-add{display:none}}
 .highlight-match{background:#ffeb3b;color:#000;padding:0 2px;border-radius:2px}
-.btn-report{background:#8b0000;color:#fff;font-weight:700;font-size:14px;padding:12px 30px}
-.btn-report:hover{background:#5a0000}
