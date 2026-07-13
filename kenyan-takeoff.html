@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenyan Standard Takeoff Sheet | QS Taking-Off</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#e8e0d5;font-family:'Courier New',monospace;padding:20px}
+.sheet{max-width:1200px;margin:0 auto;background:#fff;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,0.3);font-size:11pt}
+
+/* Header */
+.header{border-bottom:3px double #000;padding-bottom:10px;margin-bottom:15px}
+.header h1{text-align:center;font-size:16pt;text-transform:uppercase;letter-spacing:2px}
+.header .ref-row{display:flex;justify-content:space-between;margin-top:8px;font-size:10pt}
+.header .ref-row div{text-align:center}
+.header .ref-row label{font-weight:bold;display:block;font-size:8pt;text-transform:uppercase}
+.header .ref-row input,.header .ref-row select{border:none;border-bottom:1px solid #000;text-align:center;font-size:10pt;padding:2px 5px;background:transparent;font-family:'Courier New',monospace}
+
+/* Column headers */
+.col-headers{display:grid;grid-template-columns:30px 1fr 50px 50px 50px 50px 60px 60px 60px 70px 50px 70px;gap:1px;background:#000;border:1px solid #000;font-size:8pt;text-align:center;font-weight:bold;color:#fff;margin-bottom:0}
+.col-headers div{background:#1a1a1a;padding:8px 2px;border-right:1px solid #444;text-transform:uppercase;letter-spacing:0.5px}
+
+/* Dimension rows */
+.dim-row{display:grid;grid-template-columns:30px 1fr 50px 50px 50px 50px 60px 60px 60px 70px 50px 70px;gap:1px;border-bottom:1px solid #ccc;font-size:10pt;min-height:35px;align-items:center}
+.dim-row:nth-child(even){background:#fafaf5}
+.dim-row div{padding:4px 2px;text-align:center;border-right:1px solid #eee;overflow:hidden}
+.dim-row input{width:100%;border:none;text-align:center;font-size:10pt;padding:3px;background:transparent;font-family:'Courier New',monospace}
+.dim-row input:focus{outline:none;background:#ffffcc}
+.dim-row .desc{text-align:left;font-size:9pt;padding-left:5px}
+.dim-row .qty{font-weight:bold;color:#8b0000}
+.dim-row .total{font-weight:bold;color:#1b5e20}
+
+/* Section headers */
+.section-header-row{display:grid;grid-template-columns:1fr;background:#d5d5d5;padding:6px 10px;margin-top:10px;font-weight:bold;font-size:10pt;text-transform:uppercase;border:1px solid #999;letter-spacing:1px}
+
+/* Waste section */
+.waste-row{display:flex;gap:20px;align-items:center;padding:4px;font-size:9pt;background:#fffde6;border-bottom:1px solid #ccc}
+.waste-row input{width:50px;border:none;border-bottom:1px solid #000;text-align:center;font-size:9pt;background:transparent}
+
+/* Totals */
+.totals-section{margin-top:20px;border-top:2px solid #000;padding-top:10px}
+.totals-section table{width:100%;border-collapse:collapse;font-size:10pt}
+.totals-section td{padding:4px 10px;border-bottom:1px solid #ddd}
+.totals-section .grand{font-size:13pt;font-weight:bold;border-top:2px double #000;padding-top:8px}
+
+/* Buttons */
+.btn-row{display:flex;gap:10px;margin:20px 0;justify-content:center;flex-wrap:wrap}
+.btn{padding:8px 16px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;font-size:10pt;font-family:'Courier New',monospace}
+.btn-add{background:#1a5c1a;color:#fff}
+.btn-calc{background:#1e3a5f;color:#fff}
+.btn-print{background:#8b0000;color:#fff}
+.btn-clear{background:#666;color:#fff}
+.btn:hover{opacity:0.8}
+
+/* Print */
+@media print{
+body{background:#fff;padding:0}
+.sheet{box-shadow:none;padding:10mm}
+.btn-row{display:none}
+}
+
+/* Timesing note */
+.timesing-note{font-size:8pt;color:#666;font-style:italic;padding:2px 5px}
+</style>
+</head>
+<body>
+
+<div class="btn-row">
+<button class="btn btn-add" onclick="addRow()">➕ Add Dimension Row</button>
+<button class="btn btn-calc" onclick="calculateAll()">🧮 Calculate All</button>
+<button class="btn btn-print" onclick="window.print()">🖨️ Print Takeoff Sheet</button>
+<button class="btn btn-clear" onclick="clearAll()">🗑️ Clear</button>
+</div>
+
+<div class="sheet" id="takeoffSheet">
+
+<div class="header">
+<h1>📐 QUANTITY TAKEOFF SHEET</h1>
+<h1 style="font-size:12pt;font-weight:normal;">DIMENSION PAPER</h1>
+<div class="ref-row">
+<div><label>Project</label><input type="text" id="projName" placeholder="Project Name" style="width:250px"></div>
+<div><label>Drawing No.</label><input type="text" id="drawNo" placeholder="STR/01" style="width:100px"></div>
+<div><label>Date</label><input type="date" id="tDate"></div>
+<div><label>Sheet No.</label><input type="text" id="sheetNo" value="1" style="width:50px"></div>
+<div><label>Taker-off</label><input type="text" id="taker" placeholder="QS Name" style="width:150px"></div>
+<div><label>Standard</label><select id="standard"><option>Kenyan SMM</option><option>SMM7</option><option>CESMM4</option></select></div>
+</div>
+</div>
+
+<!-- Column Headers -->
+<div class="col-headers">
+<div>No.</div>
+<div>DESCRIPTION OF WORK</div>
+<div>UNIT</div>
+<div>TIMESING<br>No.</div>
+<div>TIMESING<br>L</div>
+<div>TIMESING<br>W</div>
+<div>TIMESING<br>D</div>
+<div>DIMENSION<br>L (m)</div>
+<div>DIMENSION<br>W (m)</div>
+<div>DIMENSION<br>D (m)</div>
+<div>QUANTITY</div>
+<div>TOTAL<br>(+waste)</div>
+</div>
+
+<!-- Dimension rows container -->
+<div id="dimRows"></div>
+
+<!-- Totals -->
+<div class="totals-section" id="totalsSection" style="display:none;">
+<h3 style="margin-bottom:10px;">📋 SUMMARY OF QUANTITIES</h3>
+<div id="totalsContent"></div>
+</div>
+
+<!-- Signatures -->
+<div style="display:flex;justify-content:space-between;margin-top:30px;font-size:9pt;">
+<div style="width:40%"><div style="border-top:1px solid #000;padding-top:3px;">TAKER-OFF: <span id="sigTaker">___________</span></div></div>
+<div style="width:40%"><div style="border-top:1px solid #000;padding-top:3px;">CHECKED BY: ___________</div></div>
+</div>
+<div style="text-align:right;margin-top:5px;font-size:9pt;">DATE: <span id="sigDate">___________</span></div>
+
+</div>
+
+<script>
+let rowCounter = 0;
+const dimRows = document.getElementById('dimRows');
+
+// Add empty rows on load
+for(let i=0;i<5;i++) addRow();
+
+function addRow(){
+  rowCounter++;
+  const row = document.createElement('div');
+  row.className = 'dim-row';
+  row.id = 'row'+rowCounter;
+  row.innerHTML = `
+    <div>${rowCounter}</div>
+    <div class="desc"><input type="text" placeholder="Description of work item..." style="text-align:left;width:100%" id="desc_${rowCounter}"></div>
+    <div><select id="unit_${rowCounter}" style="width:100%;border:none;font-size:9pt;font-family:'Courier New',monospace;text-align:center">
+      <option>m³</option><option>m²</option><option>m</option><option>kg</option><option>no</option><option>item</option><option>tonne</option>
+    </select></div>
+    <div><input type="number" id="tsN_${rowCounter}" value="1" min="1"></div>
+    <div><input type="number" id="tsL_${rowCounter}" value="1" min="1"></div>
+    <div><input type="number" id="tsW_${rowCounter}" value="1" min="1"></div>
+    <div><input type="number" id="tsD_${rowCounter}" value="1" min="1"></div>
+    <div><input type="number" id="dimL_${rowCounter}" step="0.001" placeholder="0.000"></div>
+    <div><input type="number" id="dimW_${rowCounter}" step="0.001" placeholder="0.000"></div>
+    <div><input type="number" id="dimD_${rowCounter}" step="0.001" placeholder="0.000"></div>
+    <div class="qty" id="qty_${rowCounter}">—</div>
+    <div class="total" id="total_${rowCounter}">—</div>
+  `;
+  dimRows.appendChild(row);
+}
+
+function calculateAll(){
+  const totals = {};
+  let grandTotal = 0;
+  
+  for(let i=1;i<=rowCounter;i++){
+    const row = document.getElementById('row'+i);
+    if(!row) continue;
+    
+    const desc = document.getElementById('desc_'+i)?.value;
+    if(!desc || desc.trim()==='') continue;
+    
+    const unit = document.getElementById('unit_'+i)?.value || 'm³';
+    const tsN = parseFloat(document.getElementById('tsN_'+i)?.value) || 1;
+    const tsL = parseFloat(document.getElementById('tsL_'+i)?.value) || 1;
+    const tsW = parseFloat(document.getElementById('tsW_'+i)?.value) || 1;
+    const tsD = parseFloat(document.getElementById('tsD_'+i)?.value) || 1;
+    const dimL = parseFloat(document.getElementById('dimL_'+i)?.value) || 0;
+    const dimW = parseFloat(document.getElementById('dimW_'+i)?.value) || 0;
+    const dimD = parseFloat(document.getElementById('dimD_'+i)?.value) || 0;
+    
+    const timesingFactor = tsN * tsL * tsW * tsD;
+    let quantity = 0;
+    
+    switch(unit){
+      case 'm³': quantity = timesingFactor * dimL * dimW * dimD; break;
+      case 'm²': quantity = timesingFactor * dimL * dimW; break;
+      case 'm': quantity = timesingFactor * dimL; break;
+      case 'kg': quantity = timesingFactor * dimL * dimW * dimD * 7850; break;
+      case 'no': quantity = timesingFactor * (dimL || 1); break;
+      case 'item': quantity = 1; break;
+      case 'tonne': quantity = timesingFactor * dimL * dimW * dimD * 2.4; break;
+      default: quantity = timesingFactor * dimL * dimW * dimD;
+    }
+    
+    // Apply 5% waste
+    const totalQty = quantity * 1.05;
+    
+    document.getElementById('qty_'+i).textContent = quantity.toFixed(3);
+    document.getElementById('total_'+i).textContent = totalQty.toFixed(3);
+    
+    if(!totals[unit]) totals[unit] = {qty:0, items:0};
+    totals[unit].qty += totalQty;
+    totals[unit].items++;
+  }
+  
+  // Show totals
+  const totalsSection = document.getElementById('totalsSection');
+  const totalsContent = document.getElementById('totalsContent');
+  totalsSection.style.display = 'block';
+  
+  let html = '<table>';
+  for(const [unit, data] of Object.entries(totals)){
+    html += `<tr><td><strong>${unit}</strong></td><td>${data.items} items</td><td style="text-align:right;"><strong>${data.qty.toFixed(2)}</strong></td></tr>`;
+  }
+  html += '</table>';
+  totalsContent.innerHTML = html;
+  
+  // Update signatures
+  document.getElementById('sigTaker').textContent = document.getElementById('taker').value || '___________';
+  document.getElementById('sigDate').textContent = document.getElementById('tDate').value || '___________';
+}
+
+function clearAll(){
+  if(confirm('Clear all rows? This cannot be undone.')){
+    dimRows.innerHTML = '';
+    rowCounter = 0;
+    for(let i=0;i<5;i++) addRow();
+    document.getElementById('totalsSection').style.display = 'none';
+  }
+}
+
+// Set today's date
+document.getElementById('tDate').valueAsDate = new Date();
+</script>
+
+</body>
+</html>
