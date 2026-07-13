@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantity Takeoff Generator - Kenyan QS Style</title>
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app-container">
+<aside class="sidebar">
+<div class="project-info">
+<h2>📐 Quantity Takeoff</h2>
+<div class="project-details">
+<label>Drawing Title:</label>
+<input type="text" id="drawingTitle" placeholder="e.g., Substructure - Strip Foundation" class="drawing-input">
+</div>
+</div>
+<div class="steps-container">
+<h3>Select Work Sections</h3>
+<div id="workSections" class="work-sections"></div>
+</div>
+<button id="addToSheetBtn" class="btn-add-sheet">➕ Add Selected to Takeoff Sheet</button>
+</aside>
+<main class="takeoff-sheet">
+<div class="sheet-header">
+<div class="sheet-title-section">
+<h1 id="sheetTitle">TAKEOFF SHEET</h1>
+<p id="sheetDrawingRef" class="drawing-ref">Drawing Ref: —</p>
+</div>
+<div class="sheet-meta">
+<span>Date: <input type="date" id="takeoffDate"></span>
+<span>Sheet No: <input type="text" id="sheetNo" placeholder="1"></span>
+</div>
+</div>
+<div class="checklist-section">
+<h3>☑ Work Items Checklist</h3>
+<table class="checklist-table"><thead><tr><th>✓</th><th>Item No.</th><th>Work Section</th><th>Description (SMM Ref)</th><th>Action</th></tr></thead>
+<tbody id="checklistBody"><tr class="empty-row"><td colspan="5">No items selected. Choose work sections from the sidebar.</td></tr></tbody></table>
+</div>
+<div class="measurements-section">
+<h3>📏 Quantity Measurements</h3>
+<table class="measurements-table"><thead><tr><th>Item</th><th>Description</th><th>Unit</th><th>No.</th><th>Length (m)</th><th>Width (m)</th><th>Height/Depth (m)</th><th>Quantity</th><th>Waste %</th><th>Total Qty</th></tr></thead>
+<tbody id="measurementsBody"><tr class="empty-row"><td colspan="10">Measurements will appear here as you work through the checklist.</td></tr></tbody></table>
+</div>
+<div class="totals-section">
+<button id="calculateBtn" class="btn-calculate">🧮 Calculate All Quantities</button>
+<div id="totalsDisplay" class="totals-display"></div>
+</div>
+<div class="export-section">
+<button id="exportBtn" class="btn-export">📄 Export / Print Takeoff Sheet</button>
+</div>
+</main>
+</div>
+<script src="js/steps.js"></script>
+<script src="js/takeoff.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
