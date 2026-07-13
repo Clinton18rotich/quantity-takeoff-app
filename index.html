@@ -52,7 +52,6 @@
 <div class="sheet-meta">
 <span>Date: <input type="date" id="takeoffDate"></span>
 <span>Sheet No: <input type="text" id="sheetNo" placeholder="1"></span>
-<span>Page: <span id="pageNum">1</span> of <span id="totalPages">1</span></span>
 <span>Taker-off: <input type="text" id="takerOff" placeholder="QS Name"></span>
 </div>
 </div>
@@ -69,7 +68,7 @@
 <h3>📏 Taking-off Quantities (Dimension Sheet Format)</h3>
 <table class="measurements-table">
 <thead>
-<tr><th>Ref</th><th>Description</th><th>Unit</th><th>Timesing<br>No.</th><th>Timesing<br>L</th><th>Timesing<br>W</th><th>Timesing<br>D</th><th>Dims<br>L (m)</th><th>Dims<br>W (m)</th><th>Dims<br>D (m)</th><th>Qty</th><th>Waste<br>%</th><th>Total<br>Qty</th><th>Rate<br>KSh</th><th>Amount<br>KSh</th></tr>
+<tr><th>Ref</th><th>Description</th><th>Unit</th><th>Timesing No.</th><th>Timesing L</th><th>Timesing W</th><th>Timesing D</th><th>Dims L (m)</th><th>Dims W (m)</th><th>Dims D (m)</th><th>Qty</th><th>Waste %</th><th>Total Qty</th><th>Rate KSh</th><th>Amount KSh</th></tr>
 </thead>
 <tbody id="measurementsBody"><tr class="empty-row"><td colspan="15">Measurements will appear here as you work through the checklist.</td></tr></tbody>
 </table>
@@ -97,6 +96,8 @@
 <button id="loadBtn" class="btn-export btn-load">📂 Load Project</button>
 <button id="clearBtn" class="btn-export btn-clear">🗑️ Clear All</button>
 </div>
+
+<div id="reportDisplay" class="report-display" style="display:none;"></div>
 </main>
 </div>
 <script src="js/steps.js"></script>
